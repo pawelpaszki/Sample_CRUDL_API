@@ -5,5 +5,6 @@ const user = express.Router();
 
 user.get('/',  UserController.list);
 user.post('/',  UserController.create);
+user.delete('/',  UserController.deleteAll);
 
 export default user;

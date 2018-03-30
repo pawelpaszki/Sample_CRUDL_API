@@ -62,7 +62,8 @@
       "**/*.d.ts",
       "dist/*",
       "coverage/*",
-      "src/test/*",
+      "test/*",
+      "src/index.ts",
       "node_modules"
     ],
     "reporter": [
