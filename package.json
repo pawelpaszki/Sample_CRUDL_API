@@ -1,6 +1,6 @@
 {
   "name": "sample-crudl",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "sample crudl API",
   "main": "index.js",
   "scripts": {
@@ -61,9 +61,11 @@
     "exclude": [
       "**/*.d.ts",
       "dist/*",
+      "docs/*",
       "coverage/*",
       "test/*",
       "src/index.ts",
+      "src/config/app.ts",
       "node_modules"
     ],
     "reporter": [

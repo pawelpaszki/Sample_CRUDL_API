@@ -5,6 +5,7 @@ import * as cors from 'cors';
 import * as express from 'express';
 import * as mongoose from 'mongoose';
 import user from '../routes/user';
+import * as path from "path";
 
 class App {
   public express;
@@ -34,6 +35,10 @@ class App {
   }
 
   private mountRoutes(): void {
+    this.express.use('/docs', express.static(path.join(__dirname, '../../docs')));
+    this.express.get('/docs', (req, res) => {
+      res.sendFile(path.join(__dirname, '../../docs/index.html'));
+    });
     this.express.use(cors());
     this.express.use('/api/users', user);
     this.express.use('/', (req, res) => {
