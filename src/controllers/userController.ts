@@ -51,6 +51,12 @@ class UserController {
     });
   }
 
+  public delete = async (req: Request, res: Response) => {
+    const userId = req.params.id;
+    await User.findByIdAndRemove(userId);
+    return res.status(200).json({message: 'User deleted successfully: ' + userId});
+  }
+
 }
 
 export default new UserController();

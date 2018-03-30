@@ -131,6 +131,18 @@ describe('# User', () => {
     });
   });
 
+  describe('/DELETE user', () => {
+    it('it should delete an existing user', (done) => {
+      chai.request(express)
+        .delete(endpoint + userID)
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.have.property('message').eql('User deleted successfully: ' + userID);
+          done();
+        });
+    });
+  });
+
   describe('/DELETE users', () => {
     it('it should delete all users', (done) => {
       chai.request(express)
