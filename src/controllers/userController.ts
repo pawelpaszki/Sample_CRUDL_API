@@ -30,6 +30,21 @@ class UserController {
     }
   }
 
+  public update = async (req: Request, res: Response) => {
+    try {
+      let user = await User.findById(req.params.id).exec();
+      user.username = req.body.username;
+      await user.save();
+      return res.status(201).json({
+        user
+      });
+    } catch (err) {
+      return res.status(403).json({
+        error: 'Unable to update user'
+      });
+    }
+  }
+
   public create = async (req: Request, res: Response) => {
     try {
       const user = new User(req.body);

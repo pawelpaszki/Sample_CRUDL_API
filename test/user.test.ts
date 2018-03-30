@@ -92,6 +92,35 @@ describe('# User', () => {
     });
   });
 
+  describe('/PUT user', () => {
+    it('it should update a single user', (done) => {
+      const username: string = 'crazybear293';
+      chai.request(express)
+        .put(endpoint + userID)
+        .send({username})
+        .end((err, res) => {
+          res.should.have.status(201);
+          res.body.should.have.property('user');
+          console.log(res.body.user);
+          expect(res.body.user.username).to.eql('crazybear293');
+          done();
+        });
+    });
+  });
+
+  describe('/PUT user', () => {
+    it('it should return an error due to invalid id', (done) => {
+      const username: string = 'crazybear293';
+      chai.request(express)
+        .put(endpoint + '1234abcd1234')
+        .send({username})
+        .end((err, res) => {
+          res.should.have.status(403);
+          done();
+        });
+    });
+  });
+
   describe('/GET user', () => {
     it('it should return a single user', (done) => {
       chai.request(express)
