@@ -4,8 +4,9 @@ import { User } from '../models/user';
 class UserController {
 
   public list = async (req: Request, res: Response) => {
+    const users = await User.find({}).exec();
     res.status(200).json({
-      users: [],
+      users,
     });
   }
 

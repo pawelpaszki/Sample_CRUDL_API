@@ -77,6 +77,18 @@ describe('# User', () => {
     });
   });
 
+  describe('/GET users', () => {
+    it('it should return the list of users', (done) => {
+      chai.request(express)
+        .get(endpoint)
+        .end((err, res) => {
+          res.should.have.status(200);
+          expect(res.body.users.length).to.eql(1);
+          done();
+        });
+    });
+  });
+
   describe('/DELETE users', () => {
     it('it should delete all users', (done) => {
       chai.request(express)
@@ -84,6 +96,18 @@ describe('# User', () => {
         .end((err, res) => {
           res.should.have.status(200);
           res.body.should.have.property('message').eql('All users deleted successfully');
+          done();
+        });
+    });
+  });
+
+  describe('/GET non-existent route', () => {
+    it('it should return 404 error', (done) => {
+      chai.request(express)
+        .get(endpoint + 'non-existent')
+        .end((err, res) => {
+          res.should.have.status(404);
+          res.body.should.have.property('error').eql('path doesn\'t exist');
           done();
         });
     });
