@@ -5,25 +5,50 @@ class UserController {
 
   public list = async (req: Request, res: Response) => {
     const users = await User.find({}).exec();
-    res.status(200).json({
+    return res.status(200).json({
       users,
     });
+  }
+
+  public getOne = async (req: Request, res: Response) => {
+    const userId = req.params.id;
+    try {
+      const user = await User.findById(userId).exec();
+      if(!user) {
+        return res.status(404).json({
+          error: 'User not found: ' + userId,
+        });
+      } else {
+        return res.status(200).json({
+          user,
+        });
+      }
+    } catch (err) {
+      return res.status(500).json({
+        error: 'Unable to get user: ' + userId,
+      });
+    }
   }
 
   public create = async (req: Request, res: Response) => {
     try {
       const user = new User(req.body);
       await user.save();
-      return res.status(201).json(
-        {user});
+      return res.status(201).json({
+        user
+      });
     } catch (err) {
-      return res.status(403).json({error: 'Unable to create new user'});
+      return res.status(403).json({
+        error: 'Unable to create new user'
+      });
     }
   }
 
   public deleteAll = async (req: Request, res: Response) => {
     await User.deleteMany({});
-    return res.status(200).json({message: 'All users deleted successfully'});
+    return res.status(200).json({
+      message: 'All users deleted successfully'
+    });
   }
 
 }

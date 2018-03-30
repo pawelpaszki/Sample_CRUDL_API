@@ -3,10 +3,11 @@ const chaiHttp = require('chai-http');
 const chai = require('chai');
 chai.use(chaiHttp);
 const should = chai.should();
-const endpoint: string = '/api/users';
+const endpoint: string = '/api/users/';
 const username: string = 'username';
 const password: string = 'password';
 const expect = chai.expect;
+let userID: string = '';
 const testUser: any = {
   "gender": "female",
   "name": {
@@ -55,6 +56,7 @@ describe('# User', () => {
         .post(endpoint)
         .send(testUser)
         .end((err, res) => {
+          userID = res.body.user._id;
           res.should.have.status(201);
           res.body.should.be.a('object');
           res.body.should.have.property('user');
@@ -78,12 +80,52 @@ describe('# User', () => {
   });
 
   describe('/GET users', () => {
-    it('it should return the list of users', (done) => {
+    it('it should return a list of users', (done) => {
       chai.request(express)
         .get(endpoint)
         .end((err, res) => {
           res.should.have.status(200);
+          res.body.should.have.property('users');
           expect(res.body.users.length).to.eql(1);
+          done();
+        });
+    });
+  });
+
+  describe('/GET user', () => {
+    it('it should return a single user', (done) => {
+      chai.request(express)
+        .get(endpoint + userID)
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.have.property('user');
+          expect(res.body.user.name.first).to.be.a('string');
+          done();
+        });
+    });
+  });
+
+  describe('/GET user', () => {
+    it('it should not return a user with non-existent id', (done) => {
+      const reversedUserID: string = userID.split('').reverse().join('');
+      chai.request(express)
+        .get(endpoint + reversedUserID)
+        .end((err, res) => {
+          res.should.have.status(404);
+          res.body.should.have.property('error').eql('User not found: ' + reversedUserID);
+          done();
+        });
+    });
+  });
+
+  describe('/GET user', () => {
+    it('it should return 500 error due to too long id', (done) => {
+      const reversedUserID: string = userID.split('').reverse().join('');
+      chai.request(express)
+        .get(endpoint + userID + 'a')
+        .end((err, res) => {
+          res.should.have.status(500);
+          res.body.should.have.property('error').eql('Unable to get user: ' + userID + 'a');
           done();
         });
     });
@@ -104,10 +146,9 @@ describe('# User', () => {
   describe('/GET non-existent route', () => {
     it('it should return 404 error', (done) => {
       chai.request(express)
-        .get(endpoint + 'non-existent')
+        .get('non-existent')
         .end((err, res) => {
           res.should.have.status(404);
-          res.body.should.have.property('error').eql('path doesn\'t exist');
           done();
         });
     });
