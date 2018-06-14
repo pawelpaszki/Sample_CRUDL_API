@@ -10,7 +10,7 @@
     "lint": "tslint -c tslint.json 'src/**/*.ts'"
   },
   "repository": "https://github.com/pawelpaszki/Sample_CRUDL_API",
-  "keywords": [],
+  "keywords": ["API"],
   "author": "Pawel Paszki",
   "license": "MIT",
   "dependencies": {
